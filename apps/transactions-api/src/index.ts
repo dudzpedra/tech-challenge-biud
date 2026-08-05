@@ -1,34 +1,23 @@
-export const createTransaction = (body: { accountExternalIdDebit: string; accountExternalIdCredit: string; transferTypeId: number; value: number }) => ({
-  status: 'pending',
-  transactionExternalId: '00000000-0000-0000-0000-000000000001',
-  ...body,
-});
-
-export const getTransaction = (transactionExternalId: string) => ({
-  transactionExternalId,
-  transactionType: { name: 'credit' },
-  transactionStatus: { name: 'pending' },
-  value: 120,
-  createdAt: new Date().toISOString(),
-});
-
-export const normalizeTransactionStatus = (status: string) => {
+export const normalizeTransactionStatus = (
+  status: string,
+): string | undefined => {
   const normalizedStatus = status.trim().toLowerCase();
 
   if (
-    normalizedStatus === 'approved' ||
-    normalizedStatus === 'aproved' ||
-    normalizedStatus === 'aprovada'
+    normalizedStatus === "approved" ||
+    normalizedStatus === "aproved" ||
+    normalizedStatus === "aprovada"
   ) {
-    return 'aprovada';
+    return "aprovada";
   }
 
-  if (
-    normalizedStatus === 'rejected' ||
-    normalizedStatus === 'rejeitada'
-  ) {
-    return 'rejeitada';
+  if (normalizedStatus === "rejected" || normalizedStatus === "rejeitada") {
+    return "rejeitada";
   }
 
-  return 'pendente';
+  if (normalizedStatus === "pending" || normalizedStatus === "pendente") {
+    return "pendente";
+  }
+
+  return undefined;
 };

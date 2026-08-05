@@ -1,5 +1,5 @@
-import { Type } from 'class-transformer';
-import { IsInt, IsNumber, IsPositive, IsUUID, Max, Min } from 'class-validator';
+import { Type } from "class-transformer";
+import { IsInt, IsNumber, IsPositive, IsUUID, Max, Min } from "class-validator";
 
 export class CreateTransactionDto {
   @IsUUID()
@@ -16,6 +16,6 @@ export class CreateTransactionDto {
   @Type(() => Number)
   @IsNumber({ maxDecimalPlaces: 2 })
   @IsPositive()
-  @Max(9999999999)
+  @Max(99999999.99)
   value!: number;
 }

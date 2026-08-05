@@ -1,38 +1,19 @@
-import { describe, expect, it } from 'vitest';
-import { createTransaction, getTransaction, normalizeTransactionStatus } from './index';
+import { describe, expect, it } from "vitest";
+import { normalizeTransactionStatus } from "./index";
 
-describe('transactions-api', () => {
-  it('creates a pending transaction payload', () => {
-    const transaction = createTransaction({
-      accountExternalIdDebit: '11111111-1111-1111-1111-111111111111',
-      accountExternalIdCredit: '22222222-2222-2222-2222-222222222222',
-      transferTypeId: 1,
-      value: 120,
-    });
-
-    expect(transaction.status).toBe('pending');
-    expect(transaction.value).toBe(120);
+describe("transactions-api", () => {
+  it("normalizes approved status names for event-driven updates", () => {
+    expect(normalizeTransactionStatus("approved")).toBe("aprovada");
+    expect(normalizeTransactionStatus("APROVED")).toBe("aprovada");
   });
 
-  it('returns a transaction lookup payload', () => {
-    const transaction = getTransaction('33333333-3333-3333-3333-333333333333');
-
-    expect(transaction.transactionExternalId).toBe('33333333-3333-3333-3333-333333333333');
-    expect(transaction.transactionStatus.name).toBe('pending');
+  it("normalizes rejected status names for event-driven updates", () => {
+    expect(normalizeTransactionStatus("rejected")).toBe("rejeitada");
+    expect(normalizeTransactionStatus("REJEITADA")).toBe("rejeitada");
   });
 
-  it('normalizes approved status names for event-driven updates', () => {
-    expect(normalizeTransactionStatus('approved')).toBe('aprovada');
-    expect(normalizeTransactionStatus('APROVED')).toBe('aprovada');
-  });
-
-  it('normalizes rejected status names for event-driven updates', () => {
-    expect(normalizeTransactionStatus('rejected')).toBe('rejeitada');
-    expect(normalizeTransactionStatus('REJEITADA')).toBe('rejeitada');
-  });
-
-  it('keeps unknown statuses in a safe fallback', () => {
-    expect(normalizeTransactionStatus('pending')).toBe('pendente');
-    expect(normalizeTransactionStatus('unknown')).toBe('pendente');
+  it("normalizes pending statuses and rejects unknown statuses", () => {
+    expect(normalizeTransactionStatus("pending")).toBe("pendente");
+    expect(normalizeTransactionStatus("unknown")).toBeUndefined();
   });
 });
