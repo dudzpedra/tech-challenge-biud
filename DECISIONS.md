@@ -1,3 +1,11 @@
+## Decisão 5 — Falhas na publicação Kafka
+
+**Decisão:** persistir a transação como `pendente` e registrar a falha de publicação sem devolver erro para a criação; em produção, evoluir este ponto para uma transactional outbox com retentativas.
+
+**Alternativas consideradas:** falhar a requisição quando o Kafka estiver indisponível ou fazer a publicação síncrona antes da gravação.
+
+**Por quê:** a criação representa um fato de negócio e não deve desaparecer por indisponibilidade temporária do broker. A outbox remove a janela entre o commit no banco e a publicação, mas adiciona uma tabela, worker e idempotência que não cabem no escopo inicial. O log deixa a falha observável e a transação continua claramente pendente para reconciliação.
+
 ## Decisão 1 — Monorepo com pnpm
 
 **Decisão:** manter o projeto em um único repositório monorepo, organizado por `apps/*` e `packages/*`, com `pnpm` como gerenciador de workspace.
