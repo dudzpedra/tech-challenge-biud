@@ -1,0 +1,30 @@
+{
+  "name": "tech-challenge-biud",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.0.0",
+  "scripts": {
+    "quality": "pnpm run quality-gate",
+    "quality-gate": "pnpm --recursive run lint && pnpm --recursive run test && pnpm --recursive run build",
+    "prepare": "husky",
+    "prisma:validate": "prisma validate",
+    "prisma:generate": "prisma generate",
+    "prisma:seed": "tsx prisma/seed.ts"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@eslint/js": "^10.0.1",
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "@types/node": "^26.1.2",
+    "@typescript-eslint/eslint-plugin": "^8.66.0",
+    "@typescript-eslint/parser": "^8.66.0",
+    "eslint": "^10.8.0",
+    "husky": "^9.1.7",
+    "prisma": "^7.9.1",
+    "tsx": "^4.23.5",
+    "typescript": "^5.6.3",
+    "vitest": "^4.1.10"
+  }
+}

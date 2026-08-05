@@ -1,0 +1,23 @@
+{
+  "name": "@biud/anti-fraud-ms",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint src/**/*.ts",
+    "test": "vitest run --config vitest.config.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/main.js"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.28",
+    "@nestjs/core": "^11.1.28",
+    "@nestjs/microservices": "^11.1.28",
+    "kafkajs": "^2.2.4",
+    "reflect-metadata": "^0.2.2"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "^11.1.28",
+    "@types/node": "^26.1.2"
+  }
+}
