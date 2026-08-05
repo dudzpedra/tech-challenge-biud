@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #1d4ed8;
+}
+
+body {
+  @apply min-h-screen bg-slate-50 text-slate-900;
+}
+input,
+select {
+  @apply rounded-md border border-slate-300 bg-white px-3 py-2 text-sm;
+}
+button {
+  @apply rounded-md bg-brand px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50;
+}

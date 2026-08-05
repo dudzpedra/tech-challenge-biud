@@ -1,15 +1,14 @@
-import { describe, expect, it } from 'vitest';
-import { formatStatus, listTransactions } from './index';
+import { describe, expect, it } from "vitest";
+import { formatCurrency, toSearchParams } from "./index";
 
-describe('dashboard', () => {
-  it('formats status to uppercase', () => {
-    expect(formatStatus('pending')).toBe('PENDING');
+describe("dashboard", () => {
+  it("formats a transaction value as BRL currency", () => {
+    expect(formatCurrency("120.5")).toBe("R$ 120,50");
   });
 
-  it('returns list metadata for the dashboard', () => {
-    const result = listTransactions([{ id: '1', status: 'pending' }]);
-
-    expect(result.total).toBe(1);
-    expect(result.items[0].status).toBe('pending');
+  it("serializes the filters used by the transaction endpoint", () => {
+    expect(toSearchParams({ status: "pendente", page: 2 }).toString()).toBe(
+      "status=pendente&page=2",
+    );
   });
 });
