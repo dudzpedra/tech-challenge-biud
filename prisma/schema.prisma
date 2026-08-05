@@ -18,6 +18,9 @@ model Transaction {
 
   transferType            TransferType     @relation(fields: [transferTypeId], references: [id])
   status                  TransactionStatus @relation(fields: [statusId], references: [id])
+
+  @@index([statusId, createdAt])
+  @@index([transferTypeId, createdAt])
 }
 
 model TransferType {
