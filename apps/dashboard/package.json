@@ -4,8 +4,21 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "lint": "eslint src/**/*.ts",
+    "dev": "next dev",
+    "lint": "eslint src/**/*.{ts,tsx}",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run --config vitest.config.ts",
-    "build": "tsc -p tsconfig.json"
+    "build": "next build"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.66.8",
+    "next": "^15.2.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "tailwindcss": "^4.1.0"
   }
 }

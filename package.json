@@ -5,8 +5,11 @@
   "packageManager": "pnpm@10.0.0",
   "scripts": {
     "quality": "pnpm run quality-gate",
-    "quality-gate": "pnpm --recursive run lint && pnpm --recursive run test && pnpm --recursive run build",
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write .",
+    "quality-gate": "pnpm run format:check && pnpm --recursive run lint && pnpm --recursive run typecheck && pnpm --recursive run test && pnpm --recursive run build",
     "prepare": "husky",
+    "postinstall": "prisma generate",
     "prisma:validate": "prisma validate",
     "prisma:generate": "prisma generate",
     "prisma:seed": "tsx prisma/seed.ts"
@@ -24,6 +27,7 @@
     "husky": "^9.1.7",
     "prisma": "^7.9.1",
     "tsx": "^4.23.5",
+    "prettier": "^3.5.3",
     "typescript": "^5.6.3",
     "vitest": "^4.1.10"
   }
