@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class AntiFraudService {
@@ -6,14 +6,14 @@ export class AntiFraudService {
     if (value > 1000) {
       return {
         approved: false,
-        status: 'rejeitada',
+        status: "rejeitada",
         statusId: 3,
       };
     }
 
     return {
       approved: true,
-      status: 'aprovada',
+      status: "aprovada",
       statusId: 2,
     };
   }
