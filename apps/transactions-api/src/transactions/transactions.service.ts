@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Kafka } from 'kafkajs';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { normalizeTransactionStatus } from '../index';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 
 @Injectable()
@@ -78,13 +79,7 @@ export class TransactionsService {
   }
 
   async updateStatusByExternalId(transactionExternalId: string, status: string) {
-    const statusName = status.trim().toLowerCase();
-    const normalizedStatus =
-      statusName === 'approved' || statusName === 'aprovada'
-        ? 'aprovada'
-        : statusName === 'rejected' || statusName === 'rejeitada'
-          ? 'rejeitada'
-          : 'pendente';
+    const normalizedStatus = normalizeTransactionStatus(status);
 
     const statusRecord = await this.prisma.transactionStatus.findUnique({
       where: { name: normalizedStatus },

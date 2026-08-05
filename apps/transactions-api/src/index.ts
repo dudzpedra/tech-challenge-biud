@@ -11,3 +11,24 @@ export const getTransaction = (transactionExternalId: string) => ({
   value: 120,
   createdAt: new Date().toISOString(),
 });
+
+export const normalizeTransactionStatus = (status: string) => {
+  const normalizedStatus = status.trim().toLowerCase();
+
+  if (
+    normalizedStatus === 'approved' ||
+    normalizedStatus === 'aproved' ||
+    normalizedStatus === 'aprovada'
+  ) {
+    return 'aprovada';
+  }
+
+  if (
+    normalizedStatus === 'rejected' ||
+    normalizedStatus === 'rejeitada'
+  ) {
+    return 'rejeitada';
+  }
+
+  return 'pendente';
+};

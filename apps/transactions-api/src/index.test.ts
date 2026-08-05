@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createTransaction, getTransaction } from './index';
+import { createTransaction, getTransaction, normalizeTransactionStatus } from './index';
 
 describe('transactions-api', () => {
   it('creates a pending transaction payload', () => {
@@ -19,5 +19,20 @@ describe('transactions-api', () => {
 
     expect(transaction.transactionExternalId).toBe('33333333-3333-3333-3333-333333333333');
     expect(transaction.transactionStatus.name).toBe('pending');
+  });
+
+  it('normalizes approved status names for event-driven updates', () => {
+    expect(normalizeTransactionStatus('approved')).toBe('aprovada');
+    expect(normalizeTransactionStatus('APROVED')).toBe('aprovada');
+  });
+
+  it('normalizes rejected status names for event-driven updates', () => {
+    expect(normalizeTransactionStatus('rejected')).toBe('rejeitada');
+    expect(normalizeTransactionStatus('REJEITADA')).toBe('rejeitada');
+  });
+
+  it('keeps unknown statuses in a safe fallback', () => {
+    expect(normalizeTransactionStatus('pending')).toBe('pendente');
+    expect(normalizeTransactionStatus('unknown')).toBe('pendente');
   });
 });
