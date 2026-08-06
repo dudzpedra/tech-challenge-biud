@@ -1,11 +1,3 @@
-## Decisão 5 — Falhas na publicação Kafka
-
-**Decisão:** persistir a transação como `pendente` e registrar a falha de publicação sem devolver erro para a criação; em produção, evoluir este ponto para uma transactional outbox com retentativas.
-
-**Alternativas consideradas:** falhar a requisição quando o Kafka estiver indisponível ou fazer a publicação síncrona antes da gravação.
-
-**Por quê:** a criação representa um fato de negócio e não deve desaparecer por indisponibilidade temporária do broker. A outbox remove a janela entre o commit no banco e a publicação, mas adiciona uma tabela, worker e idempotência que não cabem no escopo inicial. O log deixa a falha observável e a transação continua claramente pendente para reconciliação.
-
 ## Decisão 1 — Monorepo com pnpm
 
 **Decisão:** manter o projeto em um único repositório monorepo, organizado por `apps/*` e `packages/*`, com `pnpm` como gerenciador de workspace.
@@ -67,3 +59,27 @@
 **Alternativas consideradas:** apenas sharding no Kafka, apenas cache em Redis, ou tentar escalar a escrita e a leitura com um único banco sem desacoplamento.
 
 **Por quê:** sharding no Kafka ajuda a distribuir a carga de tópicos, mas não resolve a pressão de leitura e de consulta em si. Leitura em réplicas reduz a sobrecarga do primário; cache em Redis reduz o custo de consultas repetidas; CQRS separa o desenho operacional do desenho de consulta. Juntos, esses mecanismos convergem para o comportamento esperado em um sistema com pico de escrita e leitura simultânea.
+
+## Decisão 5 — Falhas na publicação Kafka
+
+**Decisão:** persistir a transação como `pendente` e registrar a falha de publicação sem devolver erro para a criação; em produção, evoluir este ponto para uma transactional outbox com retentativas.
+
+**Alternativas consideradas:** falhar a requisição quando o Kafka estiver indisponível ou fazer a publicação síncrona antes da gravação.
+
+**Por quê:** a criação representa um fato de negócio e não deve desaparecer por indisponibilidade temporária do broker. A outbox remove a janela entre o commit no banco e a publicação, mas adiciona uma tabela, worker e idempotência que não cabem no escopo inicial. O log deixa a falha observável e a transação continua claramente pendente para reconciliação.
+
+## Decisão 6 — Consumo de `transaction.status.updated` na API
+
+**Decisão:** a `transactions-api` consome atualizações de status com um consumer KafkaJS dedicado (`TransactionStatusConsumer`), sem microserviço Nest/Kafka paralelo no mesmo processo.
+
+**Alternativas consideradas:** `@EventPattern` no Nest com `connectMicroservice`, ou reutilizar o mesmo `groupId` em dois consumers distintos.
+
+**Por quê:** a API já publica eventos com KafkaJS no serviço de domínio. Manter um único consumer explícito evita dois membros no mesmo grupo (Nest + KafkaJS), reduz rebalanceamentos e deixa claro qual componente aplica o update no Postgres.
+
+## Decisão 7 — Carregamento de variáveis de ambiente nos apps Nest
+
+**Decisão:** scripts `start` dos backends usam `node --env-file=../../.env` para ler o arquivo da raiz do monorepo, independentemente do diretório de trabalho do pacote.
+
+**Alternativas consideradas:** copiar `.env` para cada app, ou depender apenas de `ConfigModule.forRoot()` com caminho relativo frágil.
+
+**Por quê:** o desafio documenta um único `.env` na raiz (como no Docker Compose). Carregar esse arquivo no `start` evita falhas silenciosas de `DATABASE_URL`/`KAFKA_BROKERS` ao rodar via `pnpm --filter`.

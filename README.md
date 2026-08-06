@@ -22,15 +22,18 @@ docker compose up -d
 pnpm prisma:generate
 pnpm exec prisma migrate deploy
 pnpm prisma:seed
+pnpm build:backends
 ```
 
-Em três terminais, inicie os processos:
+Em três terminais, inicie os processos (a partir da raiz do repositório):
 
 ```bash
 pnpm --filter @biud/transactions-api start
 pnpm --filter @biud/anti-fraud-ms start
 pnpm --filter @biud/dashboard dev
 ```
+
+Os serviços Nest carregam o `.env` da raiz via `node --env-file=../../.env`. Se você alterar variáveis, reinicie os processos. Antes do primeiro `start`, rode `pnpm build:backends` (ou `pnpm quality`, que inclui o build).
 
 Use o dashboard em `http://localhost:3000`. A API fica em `http://localhost:3001`.
 
