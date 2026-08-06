@@ -15,11 +15,6 @@ export class TransactionsController {
     return this.transactionsService.create(dto);
   }
 
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.transactionsService.findOne(id);
-  }
-
   @Get()
   list(
     @Query("status") status?: string,
@@ -37,5 +32,10 @@ export class TransactionsController {
       page: Number(page),
       limit: Number(limit),
     });
+  }
+
+  @Get(":id")
+  findOne(@Param("id") id: string) {
+    return this.transactionsService.findOne(id);
   }
 }

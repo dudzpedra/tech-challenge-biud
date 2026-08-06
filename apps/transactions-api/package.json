@@ -2,13 +2,12 @@
   "name": "@biud/transactions-api",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "lint": "eslint src/**/*.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run --config vitest.config.ts",
     "build": "tsc -p tsconfig.json",
-    "start": "node dist/main.js"
+    "start": "node --env-file=../../.env dist/main.js"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.28",
@@ -22,12 +21,14 @@
     "class-validator": "^0.15.1",
     "kafkajs": "^2.2.4",
     "prisma": "^7.9.1",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "uuid": "^14.0.1"
   },
   "devDependencies": {
     "@nestjs/testing": "^11.1.28",
     "@types/express": "^5.0.6",
     "@types/node": "^26.1.2",
+    "@types/uuid": "^11.0.0",
     "ts-jest": "^29.4.12"
   }
 }
