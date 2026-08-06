@@ -1,24 +1,13 @@
-import { Injectable, OnModuleInit } from "@nestjs/common";
+import { Controller, Inject, OnModuleInit } from "@nestjs/common";
 import { ClientKafka, EventPattern, Payload } from "@nestjs/microservices";
 import { AntiFraudService } from "./anti-fraud.service";
 
-@Injectable()
+@Controller()
 export class TransactionCreatedListener implements OnModuleInit {
-  private readonly antiFraudService: AntiFraudService;
-  private readonly client: ClientKafka;
-
-  constructor(antiFraudService: AntiFraudService) {
-    this.antiFraudService = antiFraudService;
-    this.client = new ClientKafka({
-      client: {
-        clientId: process.env.KAFKA_CLIENT_ID ?? "anti-fraud-client",
-        brokers: (process.env.KAFKA_BROKERS ?? "localhost:9092").split(","),
-      },
-      consumer: {
-        groupId: process.env.KAFKA_GROUP_ID_ANTI_FRAUD ?? "anti-fraud-consumer",
-      },
-    });
-  }
+  constructor(
+    private readonly antiFraudService: AntiFraudService,
+    @Inject("KAFKA_SERVICE") private readonly client: ClientKafka,
+  ) {}
 
   async onModuleInit() {
     await this.client.connect();
@@ -32,9 +21,14 @@ export class TransactionCreatedListener implements OnModuleInit {
       value: string | number;
     },
   ) {
-    const value = Number(message.value);
+    const rawData = message?.value ?? message;
+
+    const transactionValue =
+      typeof rawData === "string" ? JSON.parse(rawData) : rawData;
+    const value = Number(rawData);
 
     if (!Number.isFinite(value)) {
+      console.error("[AntiFraud] Valor inválido recebido:", transactionValue);
       return;
     }
 
