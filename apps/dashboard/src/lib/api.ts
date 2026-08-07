@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   Transaction,
   TransactionFilters,
@@ -7,34 +8,31 @@ import {
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
 
-const request = async <T>(path: string, init?: RequestInit): Promise<T> => {
-  const response = await fetch(`${apiUrl}${path}`, {
-    ...init,
-    headers: { "Content-Type": "application/json", ...init?.headers },
-  });
+const api = axios.create({
+  baseURL: apiUrl,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-  if (!response.ok) {
-    throw new Error("Não foi possível concluir a solicitação.");
-  }
-
-  return response.json() as Promise<T>;
-};
-
-export const listTransactions = (filters: TransactionFilters) =>
-  request<TransactionPage>(
+export const listTransactions = async (filters: TransactionFilters) => {
+  const { data } = await api.get<TransactionPage>(
     `/transactions?${toSearchParams(filters).toString()}`,
   );
+  return data;
+};
 
-export const getTransaction = (id: string) =>
-  request<Transaction>(`/transactions/${id}`);
+export const getTransaction = async (id: string) => {
+  const { data } = await api.get<Transaction>(`/transactions/${id}`);
+  return data;
+};
 
-export const createTransaction = (input: {
+export const createTransaction = async (input: {
   accountExternalIdDebit: string;
   accountExternalIdCredit: string;
   transferTypeId: number;
   value: number;
-}) =>
-  request<Transaction>("/transactions", {
-    method: "POST",
-    body: JSON.stringify(input),
-  });
+}) => {
+  const { data } = await api.post<Transaction>("/transactions", input);
+  return data;
+};
