@@ -15,7 +15,7 @@ export default function DashboardPage() {
   return (
     <AppShell
       title="Transações"
-      description="Crie transferências, acompanhe o status pendente e veja a decisão antifraude em tempo quase real."
+      description="Crie transferências, acompanhe o status pendente e veja a decisão antifraude em tempo real."
     >
       <TransactionForm />
       <TransactionHistory filters={filters} onFilterChange={setFilters} />
