@@ -6,6 +6,7 @@ import { Resolver, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { useCreateTransactionMutation } from "../app/hooks/use-transactions";
+import { toast, Toaster } from "sonner";
 
 const transactionSchema = z
   .object({
@@ -61,26 +62,30 @@ export function TransactionForm() {
           value: 120,
         });
       },
+      onError: (error) => {
+        console.error(error);
+        toast.error("Erro ao criar transação: " + error.message);
+      },
     });
   };
 
   return (
     <section className="card">
+      <Toaster />
       <h2 className="card-title">Nova transação</h2>
       <form
-        className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
+        className="grid items-end gap-4 md:grid-cols-2 lg:grid-cols-[2fr_2fr_1fr_1fr]"
         onSubmit={handleSubmit(onSubmit)}
       >
         <label className="block">
-          <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center gap-1 mb-1">
             <span className="field-label">Conta de débito</span>
             <button
               type="button"
               onClick={() => generateNewUuid("accountExternalIdDebit")}
-              className="text-xs text-brand hover:underline flex items-center gap-1"
-              title="Gerar novo UUID"
+              title="Redefinir UUID"
             >
-              <RefreshCw className="w-3 h-3" /> Gerar
+              <RefreshCw className="w-3 h-3" />
             </button>
           </div>
           <input
@@ -96,15 +101,14 @@ export function TransactionForm() {
         </label>
 
         <label className="block">
-          <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center gap-1 mb-1">
             <span className="field-label">Conta de crédito</span>
             <button
               type="button"
               onClick={() => generateNewUuid("accountExternalIdCredit")}
-              className="text-xs text-brand hover:underline flex items-center gap-1"
-              title="Gerar novo UUID"
+              title="Redefinir UUID"
             >
-              <RefreshCw className="w-3 h-3" /> Gerar
+              <RefreshCw className="w-3 h-3" />
             </button>
           </div>
           <input
@@ -120,7 +124,7 @@ export function TransactionForm() {
         </label>
 
         <label className="block">
-          <span className="field-label">Tipo</span>
+          <span className="field-label !mb-3">Tipo</span>
           <select {...register("transferTypeId")}>
             <option value="1">PIX</option>
             <option value="2">TED</option>
@@ -133,7 +137,7 @@ export function TransactionForm() {
         </label>
 
         <label className="block">
-          <span className="field-label">Valor (R$)</span>
+          <span className="field-label !mb-3">Valor (R$)</span>
           <input
             type="number"
             step="0.01"
@@ -147,7 +151,11 @@ export function TransactionForm() {
         </label>
 
         <div className="flex flex-wrap items-center gap-3 md:col-span-2 lg:col-span-4">
-          <button disabled={createMutation.isPending} type="submit">
+          <button
+            disabled={createMutation.isPending}
+            type="submit"
+            className="btn btn-primary cursor-pointer"
+          >
             {createMutation.isPending ? "Criando…" : "Criar transação"}
           </button>
           <p className="text-xs text-slate-500">
