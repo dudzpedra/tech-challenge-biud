@@ -83,3 +83,11 @@
 **Alternativas consideradas:** copiar `.env` para cada app, ou depender apenas de `ConfigModule.forRoot()` com caminho relativo frágil.
 
 **Por quê:** o desafio documenta um único `.env` na raiz (como no Docker Compose). Carregar esse arquivo no `start` evita falhas silenciosas de `DATABASE_URL`/`KAFKA_BROKERS` ao rodar via `pnpm --filter`.
+
+## Decisão 8 — Utilização do Axios para requisições no Dashboard
+
+**Decisão:** substituir o `fetch` nativo pela biblioteca `Axios` como cliente HTTP centralizado na camada de API do frontend (`apps/dashboard/src/lib/api.ts`).
+
+**Alternativas consideradas:** manter a abstração nativa com `fetch`, ou criar um wrapper customizado cobrindo serialização de dados e tratamento manual de erros HTTP.
+
+**Por quê:** o Axios abstrai a serialização/deserialização automática de payloads em JSON, rejeita Promises nativamente em status fora do intervalo 2xx (eliminando verificações manuais com `response.ok`) e facilita o reaproveitamento de configurações como `baseURL` e headers padrão para o TanStack Query.
