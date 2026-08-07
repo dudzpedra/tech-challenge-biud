@@ -1,6 +1,6 @@
 # BIUD — transações assíncronas
 
-[![Quality Gate](https://github.com/dudzpedra/tech-challenge-biud/actions/workflows/quality-gate.yml/badge.svg)](https://github.com/SEU_USUARIO/SEU_REPOSITORIO/actions/workflows/quality-gate.yml)
+[![Quality Gate](https://github.com/dudzpedra/tech-challenge-biud/actions/workflows/quality-gate.yml/badge.svg)](https://github.com/dudzpedra/tech-challenge-biud/actions/workflows/quality-gate.yml)
 
 Projeto para o desafio técnico Fullstack BIUD. Ele cria transferências, persiste o estado inicial `pendente` e usa Kafka para que o serviço antifraude atualize o resultado de forma assíncrona.
 
