@@ -1,5 +1,7 @@
 # BIUD — transações assíncronas
 
+[![Quality Gate](https://github.com/SEU_USUARIO/SEU_REPOSITORIO/actions/workflows/quality-gate.yml/badge.svg)](https://github.com/SEU_USUARIO/SEU_REPOSITORIO/actions/workflows/quality-gate.yml)
+
 Projeto para o desafio técnico Fullstack BIUD. Ele cria transferências, persiste o estado inicial `pendente` e usa Kafka para que o serviço antifraude atualize o resultado de forma assíncrona.
 
 ## Componentes
@@ -15,23 +17,37 @@ O dashboard faz polling a cada três segundos apenas enquanto houver uma transa�
 
 Pré-requisitos: Node 22+, pnpm 10 e Docker Compose.
 
+1. Configure as variáveis de ambiente
 ```bash
 cp .env.example .env
+```
+
+2. Instale as dependências e suba os contêineres do Postgres/Kafka:
+```bash
 pnpm install
 docker compose up -d
+```
+
+3. Execute as migrações e popule o banco de dados:
+```bash
 pnpm prisma:generate
 pnpm exec prisma migrate deploy
 pnpm prisma:seed
+```
+
+4. Faça o build dos microsserviços (transações e anti-fraude):
+```bash
 pnpm build:backends
 ```
 
-Em três terminais, inicie os processos (a partir da raiz do repositório):
+5. Em três terminais, inicie os processos (a partir da raiz do repositório):
 
 ```bash
 pnpm --filter @biud/transactions-api start
 pnpm --filter @biud/anti-fraud-ms start
 pnpm --filter @biud/dashboard dev
 ```
+Alternativamente, é possível entrar em cada pasta (dashboard, transactions e anti-fraud) e rodar os serviços localmente com npm run dev (dashboard) e pnpm start (microsserviçõs).
 
 Os serviços Nest carregam o `.env` da raiz via `node --env-file=../../.env`. Se você alterar variáveis, reinicie os processos. Antes do primeiro `start`, rode `pnpm build:backends` (ou `pnpm quality`, que inclui o build).
 
