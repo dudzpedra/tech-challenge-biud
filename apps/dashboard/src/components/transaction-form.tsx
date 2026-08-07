@@ -71,7 +71,6 @@ export function TransactionForm() {
         className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
         onSubmit={handleSubmit(onSubmit)}
       >
-        {/* Conta Débito */}
         <label className="block">
           <div className="flex items-center justify-between mb-1">
             <span className="field-label">Conta de débito</span>
@@ -96,7 +95,6 @@ export function TransactionForm() {
           )}
         </label>
 
-        {/* Conta Crédito */}
         <label className="block">
           <div className="flex items-center justify-between mb-1">
             <span className="field-label">Conta de crédito</span>
@@ -121,7 +119,6 @@ export function TransactionForm() {
           )}
         </label>
 
-        {/* Tipo */}
         <label className="block">
           <span className="field-label">Tipo</span>
           <select {...register("transferTypeId")}>
@@ -135,7 +132,6 @@ export function TransactionForm() {
           )}
         </label>
 
-        {/* Valor */}
         <label className="block">
           <span className="field-label">Valor (R$)</span>
           <input
@@ -150,7 +146,6 @@ export function TransactionForm() {
           )}
         </label>
 
-        {/* Submit */}
         <div className="flex flex-wrap items-center gap-3 md:col-span-2 lg:col-span-4">
           <button disabled={createMutation.isPending} type="submit">
             {createMutation.isPending ? "Criando…" : "Criar transação"}

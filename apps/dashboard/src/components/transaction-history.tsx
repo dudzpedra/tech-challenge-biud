@@ -33,7 +33,6 @@ export function TransactionHistory({
     <section className="card space-y-5">
       <h2 className="card-title">Histórico</h2>
 
-      {/* Barramento de Filtros */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <label className="block">
           <span className="field-label">Status</span>
@@ -105,7 +104,6 @@ export function TransactionHistory({
         </label>
       </div>
 
-      {/* Estados da Tabela */}
       {isLoading && (
         <p className="text-sm text-slate-600">Carregando transações…</p>
       )}
@@ -120,7 +118,6 @@ export function TransactionHistory({
         </p>
       )}
 
-      {/* Tabela de Dados */}
       {data && data.items.length > 0 && (
         <div className="overflow-x-auto rounded-lg border border-slate-200">
           <table className="data-table">
@@ -159,7 +156,6 @@ export function TransactionHistory({
         </div>
       )}
 
-      {/* Paginação */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
         <span className="text-sm text-slate-600">
           Página {filters.page} de {totalPages}

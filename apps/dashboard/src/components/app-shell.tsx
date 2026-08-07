@@ -1,15 +1,13 @@
 import Link from "next/link";
 import { ReactNode } from "react";
 
-export function AppShell({
-  title,
-  description,
-  children,
-}: {
+interface AppShellProps {
   title: string;
   description?: string;
   children: ReactNode;
-}) {
+}
+
+export function AppShell({ title, description, children }: AppShellProps) {
   return (
     <div className="min-h-screen">
       <header className="border-b border-slate-200/80 bg-white/90 backdrop-blur">
